@@ -99,7 +99,11 @@
           </div>
 
           <div class="modules-grid">
-            <article class="module-card"><h3>Member Registration</h3><p>Add and manage gym member profiles.</p></article>
+            <article class="module-card interactive" id="registrationCard" tabindex="0">
+              <h3>Member Registration</h3>
+              <p>Add and manage gym member profiles.</p>
+              <span class="module-link">Open registration →</span>
+            </article>
             <article class="module-card"><h3>Membership Management</h3><p>Track plans, expiry dates, and active memberships.</p></article>
             <article class="module-card"><h3>Attendance</h3><p>Record and review daily member attendance.</p></article>
             <article class="module-card"><h3>Fee Payment & Receipt</h3><p>Manage payments and generate receipts.</p></article>
@@ -109,6 +113,58 @@
         </section>
       </main>
     </section>
+  </div>
+
+  <div id="registrationModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-panel">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Test Case: Registration Validation</p>
+          <h2>Member Registration</h2>
+          <p class="modal-subtitle">Enter member details. Submit empty or invalid fields to test validation.</p>
+        </div>
+        <button id="closeRegistration" class="icon-btn" type="button" aria-label="Close">×</button>
+      </div>
+
+      <form id="registrationForm" novalidate>
+        <div class="field-group">
+          <label for="regName">Full Name</label>
+          <input id="regName" type="text" placeholder="Enter full name" />
+          <small class="field-error" id="nameError"></small>
+        </div>
+
+        <div class="field-group">
+          <label for="regEmail">Email</label>
+          <input id="regEmail" type="text" placeholder="Enter member email" />
+          <small class="field-error" id="regEmailError"></small>
+        </div>
+
+        <div class="field-group">
+          <label for="regPhone">Phone Number</label>
+          <input id="regPhone" type="text" placeholder="Enter 10-digit phone number" />
+          <small class="field-error" id="phoneError"></small>
+        </div>
+
+        <div class="field-group">
+          <label for="regPlan">Membership Plan</label>
+          <select id="regPlan">
+            <option value="">Select membership plan</option>
+            <option value="Monthly">Monthly</option>
+            <option value="Quarterly">Quarterly</option>
+            <option value="Annual">Annual</option>
+          </select>
+          <small class="field-error" id="planError"></small>
+        </div>
+
+        <div id="registrationSummary" class="validation-summary hidden"></div>
+        <div id="registrationSuccess" class="registration-success hidden">Member registered successfully.</div>
+
+        <div class="modal-actions">
+          <button id="clearRegistration" type="button" class="secondary-btn">Clear</button>
+          <button type="submit" class="primary-btn">Register Member</button>
+        </div>
+      </form>
+    </div>
   </div>
 
   <script src="script.js"></script>
