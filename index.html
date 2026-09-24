@@ -106,7 +106,11 @@
             </article>
             <article class="module-card"><h3>Membership Management</h3><p>Track plans, expiry dates, and active memberships.</p></article>
             <article class="module-card"><h3>Attendance</h3><p>Record and review daily member attendance.</p></article>
-            <article class="module-card"><h3>Fee Payment & Receipt</h3><p>Manage payments and generate receipts.</p></article>
+            <article class="module-card interactive" id="paymentCard" tabindex="0">
+              <h3>Fee Payment & Receipt</h3>
+              <p>Manage payments and generate receipts.</p>
+              <span class="module-link">Open payment →</span>
+            </article>
             <article class="module-card"><h3>Workout Plans</h3><p>Assign workout plans to members.</p></article>
             <article class="module-card"><h3>Reports</h3><p>View membership, attendance, and payment reports.</p></article>
           </div>
@@ -162,6 +166,90 @@
         <div class="modal-actions">
           <button id="clearRegistration" type="button" class="secondary-btn">Clear</button>
           <button type="submit" class="primary-btn">Register Member</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="paymentModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-panel payment-panel">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Test Case: Fee Payment & Receipt</p>
+          <h2>Process Membership Payment</h2>
+          <p class="modal-subtitle">Enter valid payment details and generate a receipt.</p>
+        </div>
+        <button id="closePayment" class="icon-btn" type="button" aria-label="Close">×</button>
+      </div>
+
+      <form id="paymentForm" novalidate>
+        <div class="payment-grid">
+          <div class="field-group">
+            <label for="payName">Member Name</label>
+            <input id="payName" type="text" placeholder="Enter member name" />
+            <small class="field-error" id="payNameError"></small>
+          </div>
+
+          <div class="field-group">
+            <label for="payMemberId">Member ID</label>
+            <input id="payMemberId" type="text" placeholder="e.g. GYM-101" />
+            <small class="field-error" id="payMemberIdError"></small>
+          </div>
+
+          <div class="field-group">
+            <label for="payPlan">Membership Plan</label>
+            <select id="payPlan">
+              <option value="">Select membership plan</option>
+              <option value="Monthly">Monthly</option>
+              <option value="Quarterly">Quarterly</option>
+              <option value="Annual">Annual</option>
+            </select>
+            <small class="field-error" id="payPlanError"></small>
+          </div>
+
+          <div class="field-group">
+            <label for="payAmount">Amount (₹)</label>
+            <input id="payAmount" type="number" min="1" placeholder="Enter amount" />
+            <small class="field-error" id="payAmountError"></small>
+          </div>
+
+          <div class="field-group payment-method-field">
+            <label for="payMethod">Payment Method</label>
+            <select id="payMethod">
+              <option value="">Select payment method</option>
+              <option value="UPI">UPI</option>
+              <option value="Card">Card</option>
+              <option value="Cash">Cash</option>
+            </select>
+            <small class="field-error" id="payMethodError"></small>
+          </div>
+        </div>
+
+        <div id="paymentValidation" class="validation-summary hidden"></div>
+
+        <div id="receiptBox" class="receipt-box hidden">
+          <div class="receipt-success">
+            <span class="receipt-check">✓</span>
+            <div>
+              <strong>Payment Successful</strong>
+              <p>Membership payment has been recorded and receipt generated.</p>
+            </div>
+          </div>
+          <div class="receipt-grid">
+            <div><span>Receipt ID</span><strong id="receiptId">RCPT-1001</strong></div>
+            <div><span>Member</span><strong id="receiptName">-</strong></div>
+            <div><span>Member ID</span><strong id="receiptMemberId">-</strong></div>
+            <div><span>Plan</span><strong id="receiptPlan">-</strong></div>
+            <div><span>Amount Paid</span><strong id="receiptAmount">-</strong></div>
+            <div><span>Payment Method</span><strong id="receiptMethod">-</strong></div>
+            <div><span>Status</span><strong class="paid-text">PAID</strong></div>
+            <div><span>Transaction ID</span><strong id="transactionId">-</strong></div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="clearPayment" type="button" class="secondary-btn">Clear</button>
+          <button type="submit" class="primary-btn">Pay & Generate Receipt</button>
         </div>
       </form>
     </div>
