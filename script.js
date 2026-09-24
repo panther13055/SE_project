@@ -51,6 +51,7 @@ logoutBtn.addEventListener('click',function(){
   errorBox.textContent='';
   closeRegistrationModal();
   if(typeof closePaymentModal==='function') closePaymentModal();
+  if(typeof closeAttendanceModal==='function') closeAttendanceModal();
 });
 
 function openRegistrationModal(){
@@ -263,4 +264,100 @@ paymentForm.addEventListener('submit',function(e){
 
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'&&!paymentModal.classList.contains('hidden'))closePaymentModal();
+});
+
+const attendanceCard=document.getElementById('attendanceCard');
+const attendanceModal=document.getElementById('attendanceModal');
+const closeAttendance=document.getElementById('closeAttendance');
+const attendanceForm=document.getElementById('attendanceForm');
+const clearAttendance=document.getElementById('clearAttendance');
+
+const attendanceMemberId=document.getElementById('attendanceMemberId');
+const attendanceMemberName=document.getElementById('attendanceMemberName');
+const attendanceType=document.getElementById('attendanceType');
+const attendanceMemberError=document.getElementById('attendanceMemberError');
+const attendanceNameError=document.getElementById('attendanceNameError');
+const attendanceTypeError=document.getElementById('attendanceTypeError');
+const attendanceValidation=document.getElementById('attendanceValidation');
+const attendanceSuccess=document.getElementById('attendanceSuccess');
+
+function openAttendanceModal(){
+  attendanceModal.classList.remove('hidden');
+  attendanceModal.setAttribute('aria-hidden','false');
+  clearAttendanceState();
+  setTimeout(()=>attendanceMemberId.focus(),50);
+}
+
+function closeAttendanceModal(){
+  attendanceModal.classList.add('hidden');
+  attendanceModal.setAttribute('aria-hidden','true');
+}
+
+function clearAttendanceState(){
+  [attendanceMemberId,attendanceMemberName,attendanceType].forEach(el=>el.classList.remove('input-invalid'));
+  [attendanceMemberError,attendanceNameError,attendanceTypeError].forEach(el=>el.textContent='');
+  attendanceValidation.classList.add('hidden');
+  attendanceValidation.textContent='';
+  attendanceSuccess.classList.add('hidden');
+}
+
+attendanceCard.addEventListener('click',openAttendanceModal);
+attendanceCard.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();openAttendanceModal();}
+});
+closeAttendance.addEventListener('click',closeAttendanceModal);
+attendanceModal.addEventListener('click',function(e){
+  if(e.target===attendanceModal)closeAttendanceModal();
+});
+
+clearAttendance.addEventListener('click',function(){
+  attendanceForm.reset();
+  clearAttendanceState();
+  attendanceMemberId.focus();
+});
+
+attendanceForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  clearAttendanceState();
+
+  const memberId=attendanceMemberId.value.trim().toUpperCase();
+  const memberName=attendanceMemberName.value.trim();
+  const type=attendanceType.value;
+  let hasError=false;
+
+  if(!/^GYM-\d{3,}$/.test(memberId)){
+    attendanceMemberError.textContent='Enter a valid Member ID (e.g. GYM-101).';
+    attendanceMemberId.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(!memberName){
+    attendanceNameError.textContent='Member name is required.';
+    attendanceMemberName.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(!type){
+    attendanceTypeError.textContent='Please select an attendance type.';
+    attendanceType.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(hasError){
+    attendanceValidation.textContent='Attendance validation failed: Please correct the highlighted fields.';
+    attendanceValidation.classList.remove('hidden');
+    return;
+  }
+
+  const now=new Date();
+  document.getElementById('attendanceResultId').textContent=memberId;
+  document.getElementById('attendanceResultName').textContent=memberName;
+  document.getElementById('attendanceResultType').textContent=type;
+  document.getElementById('attendanceResultDate').textContent=now.toLocaleDateString('en-IN');
+  document.getElementById('attendanceResultTime').textContent=now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+  attendanceSuccess.classList.remove('hidden');
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&!attendanceModal.classList.contains('hidden'))closeAttendanceModal();
 });
