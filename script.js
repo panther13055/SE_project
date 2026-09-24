@@ -50,6 +50,7 @@ logoutBtn.addEventListener('click',function(){
   loginForm.reset();
   errorBox.textContent='';
   closeRegistrationModal();
+  if(typeof closePaymentModal==='function') closePaymentModal();
 });
 
 function openRegistrationModal(){
@@ -144,4 +145,122 @@ registrationForm.addEventListener('submit',function(e){
 
 document.addEventListener('keydown',function(e){
   if(e.key==='Escape'&&!registrationModal.classList.contains('hidden'))closeRegistrationModal();
+});
+const paymentCard=document.getElementById('paymentCard');
+const paymentModal=document.getElementById('paymentModal');
+const closePayment=document.getElementById('closePayment');
+const paymentForm=document.getElementById('paymentForm');
+const clearPayment=document.getElementById('clearPayment');
+
+const payName=document.getElementById('payName');
+const payMemberId=document.getElementById('payMemberId');
+const payPlan=document.getElementById('payPlan');
+const payAmount=document.getElementById('payAmount');
+const payMethod=document.getElementById('payMethod');
+
+const payNameError=document.getElementById('payNameError');
+const payMemberIdError=document.getElementById('payMemberIdError');
+const payPlanError=document.getElementById('payPlanError');
+const payAmountError=document.getElementById('payAmountError');
+const payMethodError=document.getElementById('payMethodError');
+const paymentValidation=document.getElementById('paymentValidation');
+const receiptBox=document.getElementById('receiptBox');
+
+function openPaymentModal(){
+  paymentModal.classList.remove('hidden');
+  paymentModal.setAttribute('aria-hidden','false');
+  clearPaymentState();
+  setTimeout(()=>payName.focus(),50);
+}
+
+function closePaymentModal(){
+  paymentModal.classList.add('hidden');
+  paymentModal.setAttribute('aria-hidden','true');
+}
+
+function clearPaymentState(){
+  [payName,payMemberId,payPlan,payAmount,payMethod].forEach(el=>el.classList.remove('input-invalid'));
+  [payNameError,payMemberIdError,payPlanError,payAmountError,payMethodError].forEach(el=>el.textContent='');
+  paymentValidation.classList.add('hidden');
+  paymentValidation.textContent='';
+  receiptBox.classList.add('hidden');
+}
+
+paymentCard.addEventListener('click',openPaymentModal);
+paymentCard.addEventListener('keydown',function(e){
+  if(e.key==='Enter'||e.key===' '){e.preventDefault();openPaymentModal();}
+});
+closePayment.addEventListener('click',closePaymentModal);
+paymentModal.addEventListener('click',function(e){
+  if(e.target===paymentModal)closePaymentModal();
+});
+
+clearPayment.addEventListener('click',function(){
+  paymentForm.reset();
+  clearPaymentState();
+  payName.focus();
+});
+
+paymentForm.addEventListener('submit',function(e){
+  e.preventDefault();
+  clearPaymentState();
+  let hasError=false;
+
+  const name=payName.value.trim();
+  const memberId=payMemberId.value.trim().toUpperCase();
+  const plan=payPlan.value;
+  const amount=Number(payAmount.value);
+  const method=payMethod.value;
+
+  if(!name){
+    payNameError.textContent='Member name is required.';
+    payName.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(!/^GYM-\d{3,}$/.test(memberId)){
+    payMemberIdError.textContent='Enter a valid Member ID (e.g. GYM-101).';
+    payMemberId.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(!plan){
+    payPlanError.textContent='Please select a membership plan.';
+    payPlan.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(!amount || amount<=0){
+    payAmountError.textContent='Enter a valid payment amount.';
+    payAmount.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(!method){
+    payMethodError.textContent='Please select a payment method.';
+    payMethod.classList.add('input-invalid');
+    hasError=true;
+  }
+
+  if(hasError){
+    paymentValidation.textContent='Payment validation failed: Please correct the highlighted fields.';
+    paymentValidation.classList.remove('hidden');
+    return;
+  }
+
+  const receiptId='RCPT-'+String(Math.floor(1000+Math.random()*9000));
+  const transactionId='TXN'+Date.now().toString().slice(-8);
+
+  document.getElementById('receiptId').textContent=receiptId;
+  document.getElementById('receiptName').textContent=name;
+  document.getElementById('receiptMemberId').textContent=memberId;
+  document.getElementById('receiptPlan').textContent=plan;
+  document.getElementById('receiptAmount').textContent='₹'+amount.toLocaleString('en-IN');
+  document.getElementById('receiptMethod').textContent=method;
+  document.getElementById('transactionId').textContent=transactionId;
+  receiptBox.classList.remove('hidden');
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'&&!paymentModal.classList.contains('hidden'))closePaymentModal();
 });
