@@ -105,7 +105,11 @@
               <span class="module-link">Open registration →</span>
             </article>
             <article class="module-card"><h3>Membership Management</h3><p>Track plans, expiry dates, and active memberships.</p></article>
-            <article class="module-card"><h3>Attendance</h3><p>Record and review daily member attendance.</p></article>
+            <article class="module-card interactive" id="attendanceCard" tabindex="0">
+              <h3>Attendance</h3>
+              <p>Record and review daily member attendance.</p>
+              <span class="module-link">Mark attendance →</span>
+            </article>
             <article class="module-card interactive" id="paymentCard" tabindex="0">
               <h3>Fee Payment & Receipt</h3>
               <p>Manage payments and generate receipts.</p>
@@ -250,6 +254,68 @@
         <div class="modal-actions">
           <button id="clearPayment" type="button" class="secondary-btn">Clear</button>
           <button type="submit" class="primary-btn">Pay & Generate Receipt</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="attendanceModal" class="modal hidden" aria-hidden="true">
+    <div class="modal-panel attendance-panel">
+      <div class="modal-header">
+        <div>
+          <p class="eyebrow">Test Case: Attendance</p>
+          <h2>Mark Member Attendance</h2>
+          <p class="modal-subtitle">Enter a valid member ID and record today's attendance.</p>
+        </div>
+        <button id="closeAttendance" class="icon-btn" type="button" aria-label="Close">×</button>
+      </div>
+
+      <form id="attendanceForm" novalidate>
+        <div class="field-group">
+          <label for="attendanceMemberId">Member ID</label>
+          <input id="attendanceMemberId" type="text" placeholder="e.g. GYM-101" />
+          <small class="field-error" id="attendanceMemberError"></small>
+        </div>
+
+        <div class="field-group">
+          <label for="attendanceMemberName">Member Name</label>
+          <input id="attendanceMemberName" type="text" placeholder="Enter member name" />
+          <small class="field-error" id="attendanceNameError"></small>
+        </div>
+
+        <div class="field-group">
+          <label for="attendanceType">Attendance Type</label>
+          <select id="attendanceType">
+            <option value="">Select attendance type</option>
+            <option value="Check-In">Check-In</option>
+            <option value="Check-Out">Check-Out</option>
+          </select>
+          <small class="field-error" id="attendanceTypeError"></small>
+        </div>
+
+        <div id="attendanceValidation" class="validation-summary hidden"></div>
+
+        <div id="attendanceSuccess" class="attendance-success hidden">
+          <div class="receipt-success">
+            <span class="receipt-check">✓</span>
+            <div>
+              <strong>Attendance Recorded Successfully</strong>
+              <p>Member attendance has been saved for today's session.</p>
+            </div>
+          </div>
+          <div class="receipt-grid">
+            <div><span>Member ID</span><strong id="attendanceResultId">-</strong></div>
+            <div><span>Member Name</span><strong id="attendanceResultName">-</strong></div>
+            <div><span>Attendance Type</span><strong id="attendanceResultType">-</strong></div>
+            <div><span>Date</span><strong id="attendanceResultDate">-</strong></div>
+            <div><span>Time</span><strong id="attendanceResultTime">-</strong></div>
+            <div><span>Status</span><strong class="paid-text">RECORDED</strong></div>
+          </div>
+        </div>
+
+        <div class="modal-actions">
+          <button id="clearAttendance" type="button" class="secondary-btn">Clear</button>
+          <button type="submit" class="primary-btn">Mark Attendance</button>
         </div>
       </form>
     </div>
